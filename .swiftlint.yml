@@ -1,0 +1,28 @@
+indentation:
+  indentation_width: 4
+  include_comments: true
+  include_compiler_directives: true
+
+disabled_rules: # 禁用的规则
+  - trailing_whitespace
+  - force_cast
+  - force_try
+  - force_unwrapping
+
+opt_in_rules: # 可选规则
+  - empty_count
+  - explicit_init
+  - implicit_return
+
+included: # 包含的文件
+  - Sources
+  - Tests
+
+excluded: # 排除的文件
+  - Carthage
+  - Pods
+  - fastlane
+  - build
+  - .build
+
+

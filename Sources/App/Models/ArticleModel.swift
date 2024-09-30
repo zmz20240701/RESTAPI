@@ -51,8 +51,8 @@ final class ArticleModel: Model, @unchecked Sendable {
     @Timestamp(key: FieldKeys.updatedAt, on: .update)
     var updatedAt: Date?
     
-    @OptionalField(key: FieldKeys.publishedAt)
-    var publishedAt: Date?
+    @OptionalField(key: FieldKeys.publishedDate)
+    var publishedDate: Date?
     
     @OptionalField(key: FieldKeys.tags)
     var tags: [String]?
@@ -72,7 +72,7 @@ final class ArticleModel: Model, @unchecked Sendable {
         self.role = role
         self.createdAt = createdAt
         self.updatedAt = updatedAt
-        self.publishedAt = publishedAt
+        self.publishedDate = publishedDate
         self.tags = tags
     }
     

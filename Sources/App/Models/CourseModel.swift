@@ -33,8 +33,8 @@ final class CourseModel: Model, @unchecked Sendable {
     @OptionalField(key: FieldKeys.price)
     var price: PriceEnum.RawValue?
     
-    @OptionalField(key: FieldKeys.headerIamge)
-    var headerImage: URL?
+    @OptionalField(key: FieldKeys.headerImage)
+    var headerImage: String?
     
     @OptionalField(key: FieldKeys.article)
     var article: String?
@@ -58,14 +58,32 @@ final class CourseModel: Model, @unchecked Sendable {
     var createAt: Date?
     
     @Timestamp(key: FieldKeys.updatedAt, on: .update)
-    var updateAt: Date?
+    var updatedAt: Date?
     
     @OptionalField(key: FieldKeys.publishedDate)
     var publishedDate: Date?
     
     init() {}
     
-    init(id: UUID? = nil, title: String? = nil, slug: String? = nil, tags: [String]? = nil, description: String? = nil, status: StatusEnum.RawValue? = nil, price: PriceEnum.RawValue? = nil, headerImage: URL? = nil, article: String? = nil, topHexColor: String? = nil, bottomHexColor: String? = nil, sylabus: URL? = nil, assets: URL? = nil, author: String? = nil, createAt: Date? = nil, updateAt: Date? = nil, publishedDate: Date? = nil) {
+    init(
+        id: UUID? = nil,
+        title: String? = nil,
+        slug: String? = nil,
+        tags: [String]? = nil,
+        description: String? = nil,
+        status: StatusEnum.RawValue? = nil,
+        price: PriceEnum.RawValue? = nil,
+        headerImage: String? = nil,
+        article: String? = nil,
+        topHexColor: String? = nil,
+        bottomHexColor: String? = nil,
+        sylabus: URL? = nil,
+        assets: URL? = nil,
+        author: String? = nil,
+        createAt: Date? = nil,
+        updateAt: Date? = nil,
+        publishedDate: Date? = nil
+    ) {
         self.id = id
         self.title = title
         self.slug = slug
@@ -81,7 +99,7 @@ final class CourseModel: Model, @unchecked Sendable {
         self.assets = assets
         self.author = author
         self.createAt = createAt
-        self.updateAt = updateAt
+        self.updatedAt = updatedAt
         self.publishedDate = publishedDate
     }
     

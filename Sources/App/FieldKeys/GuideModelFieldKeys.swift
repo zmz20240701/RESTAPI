@@ -17,7 +17,7 @@ extension GuideModel {
         static var description: FieldKey { "描述" }
         static var status: FieldKey { "状态" }
         static var price: FieldKey { "价格" }
-        static var headerIamge: FieldKey { "头图" }
+        static var headerImage: FieldKey { "头图" }
         static var author: FieldKey { "作者" }
         static var createdAt: FieldKey { "创建于" }
         static var updatedAt: FieldKey { "更新于" }

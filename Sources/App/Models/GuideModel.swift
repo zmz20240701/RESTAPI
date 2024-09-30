@@ -33,24 +33,37 @@ final class GuideModel: Model, @unchecked Sendable {
     @OptionalField(key: FieldKeys.price)
     var price: PriceEnum.RawValue?
     
-    @OptionalField(key: FieldKeys.headerIamge)
-    var headerImage: URL?
+    @OptionalField(key: FieldKeys.headerImage)
+    var headerImage: String?
     
     @OptionalField(key: FieldKeys.author)
     var author: String?
     
     @Timestamp(key: FieldKeys.createdAt, on: .create)
-    var createAt: Date?
+    var createdAt: Date?
     
     @Timestamp(key: FieldKeys.updatedAt, on: .update)
-    var updateAt: Date?
+    var updatedAt: Date?
     
     @OptionalField(key: FieldKeys.publishedDate)
     var publishedDate: Date?
     
     init() {}
     
-    init(id: UUID? = nil, title: String? = nil, slug: String? = nil, tags: [String]? = nil, description: String? = nil, status: StatusEnum.RawValue? = nil, price: PriceEnum.RawValue? = nil, headerImage: URL? = nil, author: String? = nil, createAt: Date? = nil, updateAt: Date? = nil, publishedDate: Date? = nil) {
+    init(
+        id: UUID? = nil,
+        title: String? = nil,
+        slug: String? = nil,
+        tags: [String]? = nil,
+        description: String? = nil,
+        status: StatusEnum.RawValue? = nil,
+        price: PriceEnum.RawValue? = nil,
+        headerImage: String? = nil,
+        author: String? = nil,
+        createdAt: Date? = nil,
+        updatedAt: Date? = nil,
+        publishedDate: Date? = nil
+    ) {
         self.id = id
         self.title = title
         self.slug = slug
@@ -60,8 +73,8 @@ final class GuideModel: Model, @unchecked Sendable {
         self.price = price
         self.headerImage = headerImage
         self.author = author
-        self.createAt = createAt
-        self.updateAt = updateAt
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
         self.publishedDate = publishedDate
     }
     

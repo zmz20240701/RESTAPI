@@ -16,7 +16,7 @@ extension CourseModel {
         static var description: FieldKey { "描述" }
         static var status: FieldKey { "状态" }
         static var price: FieldKey { "价格" }
-        static var headerIamge: FieldKey { "头图" }
+        static var headerImage: FieldKey { "头图" }
         static var article: FieldKey { "文章" }
         static var topHexColor: FieldKey { "头颜色" }
         static var bottomHexColor: FieldKey { "底颜色" }
