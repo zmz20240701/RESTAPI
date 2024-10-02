@@ -19,10 +19,10 @@ final class SessionModel: Model, @unchecked Sendable {
   var title: String?
 
   @OptionalField(key: FieldKeys.mp4URL)
-  var mp4URL: String?
+  var mp4URL: URL?
 
   @OptionalField(key: FieldKeys.hlsURL)
-  var hlsURL: String?
+  var hlsURL: URL?
 
   @Timestamp(key: FieldKeys.createdAt, on: .create)
   var createdAt: Date?
@@ -53,8 +53,8 @@ final class SessionModel: Model, @unchecked Sendable {
   init(
     id: UUID? = nil,
     title: String? = nil,
-    mp4URL: String? = nil,
-    hlsURL: String? = nil,
+    mp4URL: URL? = nil,
+    hlsURL: URL? = nil,
     createdAt: Date? = nil,
     updatedAt: Date? = nil,
     publishedAt: Date? = nil,

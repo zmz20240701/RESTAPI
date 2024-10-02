@@ -34,7 +34,7 @@ final class CourseModel: Model, @unchecked Sendable {
     var price: PriceEnum.RawValue?
     
     @OptionalField(key: FieldKeys.headerImage)
-    var headerImage: String?
+    var headerImage: URL?
     
     @OptionalField(key: FieldKeys.article)
     var article: String?
@@ -73,7 +73,7 @@ final class CourseModel: Model, @unchecked Sendable {
         description: String? = nil,
         status: StatusEnum.RawValue? = nil,
         price: PriceEnum.RawValue? = nil,
-        headerImage: String? = nil,
+        headerImage: URL? = nil,
         article: String? = nil,
         topHexColor: String? = nil,
         bottomHexColor: String? = nil,

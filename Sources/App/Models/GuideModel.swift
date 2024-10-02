@@ -34,7 +34,7 @@ final class GuideModel: Model, @unchecked Sendable {
     var price: PriceEnum.RawValue?
     
     @OptionalField(key: FieldKeys.headerImage)
-    var headerImage: String?
+    var headerImage: URL?
     
     @OptionalField(key: FieldKeys.author)
     var author: String?
@@ -58,7 +58,7 @@ final class GuideModel: Model, @unchecked Sendable {
         description: String? = nil,
         status: StatusEnum.RawValue? = nil,
         price: PriceEnum.RawValue? = nil,
-        headerImage: String? = nil,
+        headerImage: URL? = nil,
         author: String? = nil,
         createdAt: Date? = nil,
         updatedAt: Date? = nil,

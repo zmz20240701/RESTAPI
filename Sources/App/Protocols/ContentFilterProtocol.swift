@@ -8,7 +8,7 @@ protocol ContentFilterProtocol {
   associatedtype Status
   associatedtype Model
 
-  func search(_ req: Request, query: String) async throws -> [Model]
+  static func search(_ req: Request, query: String) async throws -> [Model]
 
 }
 
@@ -18,7 +18,21 @@ protocol BackendContentFilterProtocol {
   associatedtype Status
   associatedtype Model
 
-  func getByStatus(_ req: Request, status: StatusEnum.RawValue) async throws -> [Model]
-  func getAllWithAuthor(_ req: Request, author: UserModel) async throws -> [Model]
-  func search(_ req: Request, query: String) async throws -> [Model]
+  static func getByStatus(_ req: Request, status: StatusEnum.RawValue) async throws -> [Model]
+  static func search(_ req: Request, query: String) async throws -> [Model]
+}
+
+protocol SearchUserProtocol {
+    associatedtype request
+    static func search(_ req: request, query: String) async throws -> [UserModel.Public]
+}
+
+
+protocol BackendFilterHandlerProtocol {
+    associatedtype request
+    associatedtype model
+    associatedtype answer
+    
+    func getByStatus(_ req: request) async throws -> [model]
+    func search(_ req: request) async throws -> [model]
 }

@@ -191,17 +191,20 @@ final class UserModel: Model, @unchecked Sendable {
 extension UserModel: Content {}  // 通过扩展 Content 协议, 我们可以将 UserModel 转化为 HTTP 请求和响应的内容
 extension UserModel: Authenticatable {}  // 通过扩展 Authenticatable 协议, 我们可以使用 UserModel 作为身份验证的凭证
 
-extension UserModel: ModelAuthenticatable {  // 定义身份验证的字段
+// 告诉 Vapor 如何从 UserModel 中获取用户名和密码进行身份验证
+extension UserModel: ModelAuthenticatable {  // 标识模型可以被用于身份验证
   static let usernameKey = \UserModel.$email
   static let passwordHashKey = \UserModel.$password
 
-  func verify(password: String) throws -> Bool {
+  func verify(password: String) throws -> Bool {  // 验证传入的铭文密码是否与存储在数据库中的哈希密码匹配
     try Bcrypt.verify(password, created: self.password)
   }
 }
 
-extension UserModel: ModelSessionAuthenticatable {}
-extension UserModel: ModelCredentialsAuthenticatable {}
+extension UserModel: ModelSessionAuthenticatable {}  // 基于会话的身份验证协议
+// 用户在登录后通过会话保持身份验证状态, 无需每次请求都进行身份验证
+extension UserModel: ModelCredentialsAuthenticatable {}  // 基于凭证的身份验证协议
+// 用户通过凭证(用户名,密码)来验证身份
 
 // 通过转化为公共模型, 我们可以隐藏一些敏感信息, 以保护用户的隐私
 extension UserModel {

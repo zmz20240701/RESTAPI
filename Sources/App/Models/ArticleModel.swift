@@ -31,7 +31,7 @@ final class ArticleModel: Model, @unchecked Sendable {
     var guide: GuideModel.IDValue?
     
     @OptionalField(key: FieldKeys.headerImage)
-    var headerImage: String?
+    var headerImage: URL?
     
     @OptionalField(key: FieldKeys.author)
     var author: String?
@@ -58,7 +58,7 @@ final class ArticleModel: Model, @unchecked Sendable {
     var tags: [String]?
     
     init() {}
-    init(id: UUID? = nil, title: String? = nil, slug: String? = nil, excerpt: String? = nil, content: String? = nil, guide: GuideModel.IDValue? = nil, headerImage: String? = nil, author: String? = nil, status: StatusEnum.RawValue? = nil, price: PriceEnum.RawValue? = nil, role: ContentRoleEnum.RawValue? = nil, createdAt: Date? = nil, updatedAt: Date? = nil, publishedAt: Date? = nil, tags: [String]? = nil) {
+    init(id: UUID? = nil, title: String? = nil, slug: String? = nil, excerpt: String? = nil, content: String? = nil, guide: GuideModel.IDValue? = nil, headerImage: URL? = nil, author: String? = nil, status: StatusEnum.RawValue? = nil, price: PriceEnum.RawValue? = nil, role: ContentRoleEnum.RawValue? = nil, createdAt: Date? = nil, updatedAt: Date? = nil, publishedAt: Date? = nil, tags: [String]? = nil) {
         self.id = id
         self.title = title
         self.slug = slug

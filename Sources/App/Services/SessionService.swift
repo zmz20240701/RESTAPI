@@ -10,7 +10,8 @@ struct SessionService: ContentProtocol {
   typealias Status = HTTPStatus
   typealias Model = SessionModel
 
-  static func create(_ req: Request, createDTO: CreateDTO, author: UserModel) async throws -> Status {
+  static func create(_ req: Request, createDTO: CreateDTO, author: UserModel) async throws -> Status
+  {
     guard
       let course = try await CourseModel.query(on: req.db)
         .filter(\.$slug == createDTO.slug)
@@ -18,10 +19,10 @@ struct SessionService: ContentProtocol {
     else {
       throw Abort(.notFound, reason: "Course not found")
     }
-    let session = SessionModel()
+    let session: SessionModel = SessionModel()
     session.title = createDTO.title
-    session.mp4URL = createDTO.mp4URL
-    session.hlsURL = createDTO.hlsURL
+      session.mp4URL = URL(string: createDTO.mp4URL!)
+      session.hlsURL = URL(string: createDTO.hlsURL!)
     session.createdAt = Date()
     session.updatedAt = Date()
     session.publishedAt = createDTO.publishedAt
@@ -51,7 +52,7 @@ struct SessionService: ContentProtocol {
     return sessions
   }
 
-  static func update(_ req: Request, object: String, updateDTO: UpdateDTO) async throws -> Status {
+    static func update(_ req: Request, object: String, updateDTO: UpdateDTO) async throws -> Model{
     guard
       let session = try await SessionModel.query(on: req.db)
         .filter(\.$slug == object)
@@ -60,15 +61,15 @@ struct SessionService: ContentProtocol {
       throw Abort(.notFound, reason: "Session not found")
     }
     session.title = updateDTO.title ?? session.title
-    session.mp4URL = updateDTO.mp4URL ?? session.mp4URL
-    session.hlsURL = updateDTO.hlsURL ?? session.hlsURL
+        session.mp4URL = URL(string: updateDTO.mp4URL!) ?? session.mp4URL
+        session.hlsURL = URL(string: updateDTO.hlsURL!) ?? session.hlsURL
     session.updatedAt = Date()
     session.publishedAt = updateDTO.publishedAt ?? session.publishedAt
     session.status = updateDTO.status ?? session.status
     session.price = updateDTO.price ?? session.price
     session.article = updateDTO.article ?? session.article
     try await session.save(on: req.db)
-    return .ok
+        return session
   }
 
   static func delete(_ req: Request, object: String) async throws -> Status {
@@ -83,3 +84,40 @@ struct SessionService: ContentProtocol {
     return .noContent
   }
 }
+
+extension SessionService: BackendContentFilterProtocol {
+    static func getByStatus(_ req: Vapor.Request, status: StatusEnum.RawValue) async throws -> [SessionModel] {
+        let session = try await SessionModel.query(on: req.db)
+            .filter(\.$status == status)
+            .all()
+        return session
+    }
+    
+    static func search(_ req: Vapor.Request, query: String) async throws -> [SessionModel] {
+        let session = try await SessionModel.query(on: req.db)
+            .group(.or) { or in
+                or.filter(\.$title == query)
+            }.all()
+        return session
+    }
+}
+
+extension SessionService: GetSelectedObjectProtocol {
+    typealias model = SessionModel
+    
+    typealias request = Vapor.Request
+    
+    static func getSelectionObject(_ req: Request, object: String) async throws -> SessionModel {
+        let user = req.auth.get(UserModel.self)
+        guard
+            let session = try await SessionModel.query(on: req.db)
+                .filter(\.$slug == object)
+                .filter(\.$status == StatusEnum.published.rawValue)
+                .first()
+        else {
+            throw Abort(.notFound)
+        }
+        return session
+    }
+}
+

@@ -27,7 +27,7 @@ struct ArticleService: ContentProtocol {
       excerpt: createDTO.excerpt,
       content: "",
       guide: createDTO.guide,
-      headerImage: createDTO.headerImage,
+      headerImage: URL(string: createDTO.headerImage!),
       author: "",
       status: createDTO.status ?? StatusEnum.draft.rawValue,
       price: createDTO.price ?? guide.price,
@@ -58,7 +58,7 @@ struct ArticleService: ContentProtocol {
   }
 
   static func update(_ req: Request, object: String, updateDTO: UpdateArticleDTO) async throws
-    -> HTTPStatus {
+    -> ArticleModel {
     guard
       let article = try await ArticleModel.query(on: req.db)
         .filter(\.$slug == object)
@@ -70,7 +70,7 @@ struct ArticleService: ContentProtocol {
     article.excerpt = updateDTO.excerpt ?? article.excerpt
     article.content = updateDTO.content ?? article.content
     article.guide = updateDTO.guide ?? article.guide
-    article.headerImage = updateDTO.headerImage ?? article.headerImage
+        article.headerImage = URL(string: updateDTO.headerImage!) ?? article.headerImage
     article.status = updateDTO.status ?? article.status
     article.price = updateDTO.price ?? article.price
     article.role = updateDTO.role ?? article.role
@@ -79,7 +79,7 @@ struct ArticleService: ContentProtocol {
     article.tags = updateDTO.tags ?? article.tags
 
     try await article.save(on: req.db)
-    return .ok
+        return article
   }
 
   static func delete(_ req: Request, object: String) async throws -> HTTPStatus {
@@ -93,4 +93,42 @@ struct ArticleService: ContentProtocol {
     try await article.delete(on: req.db)
     return .noContent
   }
+}
+
+extension ArticleService: BackendContentFilterProtocol {
+    static func getByStatus(_ req: Request, status: StatusEnum.RawValue) async throws -> [ArticleModel] {
+        let articles = try await ArticleModel.query(on: req.db)
+            .filter(\.$status == status)
+            .all()
+        return articles
+    }
+    
+    // 根据用户提供的查询字符串, 在文章的标题和内容中搜索符合条件的记录
+    static func search(_ req: Request, query: String) async throws -> [ArticleModel] {
+        let query = try await ArticleModel.query(on: req.db)
+        // 代表我们将对ArticleModel表执行查询操作, 并且查询将基于提供的req.db数据库进行链接执行
+            .group(.or) { or in // 使用 OR 逻辑组合查询条件
+                or.filter(\.$title =~ query) // 在or条件下如何构造具体的查询条件
+            }.all()
+        return query
+    }
+}
+
+extension ArticleService: GetSelectedObjectProtocol {
+    typealias model = ArticleModel
+    
+    typealias request = Vapor.Request
+    
+    static func getSelectionObject(_ req: Request, object: String) async throws -> ArticleModel {
+        let user = req.auth.get(UserModel.self)
+        guard
+            let article = try await ArticleModel.query(on: req.db)
+                .filter(\.$slug == object)
+                .filter(\.$status == StatusEnum.published.rawValue)
+                .first()
+        else {
+            throw Abort(.notFound)
+        }
+        return article
+    }
 }
